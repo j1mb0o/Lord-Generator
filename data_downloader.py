@@ -11,9 +11,9 @@ def fetch_byron_poems() -> List[Dict]:
     else:
         raise Exception(f"Failed to fetch poems: {response.status_code}")
 
-def filter_short_poems(poems: List[Dict], max_lines: int = 20) -> List[Dict]:
-    """Filter poems to keep only those with at most max_lines lines"""
-    return [poem for poem in poems if len(poem["lines"]) <= max_lines]
+# def filter_short_poems(poems: List[Dict], max_lines: int = 20) -> List[Dict]:
+#     """Filter poems to keep only those with at most max_lines lines"""
+#     return [poem for poem in poems if len(poem["lines"]) <= max_lines]
 
 def save_to_json(data: Dict, filename: str) -> None:
     """Save the poetry dictionary to a JSON file"""
@@ -27,16 +27,16 @@ def main():
         all_poems = fetch_byron_poems()
         print(f"Found {len(all_poems)} total poems.")
         
-        if SHORT:
-            short_poems = filter_short_poems(all_poems)
-            print(f"Found {len(short_poems)} poems with 20 or fewer lines.")
-            filename = "byron_short_poems.json"
-            save_to_json(short_poems, filename)
-            print(f"Successfully saved short poems to {filename}")
-        else:
-            filename = "byron_all_poems.json"
-            print(f"Successfully saved poems to {filename}")
-            save_to_json(all_poems, filename)
+        # if SHORT:
+        #     short_poems = filter_short_poems(all_poems)
+        #     print(f"Found {len(short_poems)} poems with 20 or fewer lines.")
+        #     filename = "byron_short_poems.json"
+        #     save_to_json(short_poems, filename)
+        #     print(f"Successfully saved short poems to {filename}")
+        # else:
+        filename = "byron_all_poems.json"
+        print(f"Successfully saved poems to {filename}")
+        save_to_json(all_poems, filename)
 
         
     except Exception as e:
