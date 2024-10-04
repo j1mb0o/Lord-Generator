@@ -1,0 +1,16 @@
+[
+    {
+      "title": "Real Byron Poem",
+      "lines": [
+        "This is a real Byron poem\nThat will be mixed with generated ones\nShowing the proper format\nWith line breaks embedded"
+      ],
+      "isGenerated": false
+    },
+    {
+      "title": "Generated Poem",
+      "lines": [
+        "This is a generated poem\nTrying to mimic Byron's style\nWith the same formatting\nAs the authentic poems"
+      ],
+      "isGenerated": true
+    }
+  ]

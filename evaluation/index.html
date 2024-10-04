@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byron Poetry Evaluator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .poem {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #2c3e50;
+            white-space: pre-line;
+        }
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .choice-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .choice-buttons button {
+            flex: 1;
+        }
+        #progress {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .file-status {
+            margin-left: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- File Input Section -->
+        <div id="fileInput" class="section active">
+            <h1>Byron Poetry Evaluator</h1>
+            <span id="tutorialStatus" class="file-status">Not loaded</span>
+            <span id="evaluationStatus" class="file-status">Not loaded</span>
+            <button onclick="startNameInput()">Start</button>
+        </div>
+
+        <!-- Name Input Section -->
+        <div id="nameInput" class="section">
+            <h2>Enter Your Name</h2>
+            <input type="text" id="evaluatorName" placeholder="Your name">
+            <button onclick="startTutorial()">Start Tutorial</button>
+        </div>
+
+        <!-- Tutorial Section -->
+        <div id="tutorial" class="section">
+            <h2>Tutorial</h2>
+            <div id="tutorialPoems"></div>
+            <button onclick="startEvaluation()">Start Evaluation</button>
+        </div>
+
+        <!-- Evaluation Section -->
+        <div id="evaluation" class="section">
+            <h2>Evaluation</h2>
+            <div id="currentPoem" class="poem"></div>
+            <div class="choice-buttons">
+                <button onclick="evaluatePoem('generated')">Generated</button>
+                <button onclick="evaluatePoem('authentic')">Authentic Byron</button>
+            </div>
+            <div id="progress"></div>
+        </div>
+
+        <!-- Completion Section -->
+        <div id="completion" class="section">
+            <h2>Evaluation Complete!</h2>
+            <p>Thank you for participating!</p>
+            <button onclick="saveResults()">Save Results</button>
+        </div>
+    </div>
+
+    <script>
+        let tutorialPoems = [];
+        let evaluationPoems = [];
+        let currentPoemIndex = 0;
+        let results = [];
+        let evaluatorName = "";
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        async function loadPoemsFromFile(filePath) {
+            const response = await fetch(filePath);
+            if (!response.ok) {
+                throw new Error(`Failed to load ${filePath}`);
+            }
+            return await response.json();
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Automatically load the JSON files
+                tutorialPoems = await loadPoemsFromFile('tutorialPoems.json');  // Load from local file
+                evaluationPoems = await loadPoemsFromFile('evaluationPoems.json');  // Load from local file
+                evaluationPoems = _.shuffle(evaluationPoems);  // Shuffle evaluation poems
+
+                // Update file status
+                document.getElementById('tutorialStatus').textContent = `Loaded: ${tutorialPoems.length} tutorial poems`;
+                document.getElementById('evaluationStatus').textContent = `Loaded: ${evaluationPoems.length} evaluation poems`;
+            } catch (error) {
+                alert('Error loading poems: ' + error.message);
+            }
+        });
+
+        function startNameInput() {
+            if (!tutorialPoems.length || !evaluationPoems.length) {
+                alert('Please wait until the poems are loaded.');
+                return;
+            }
+            showSection('nameInput');
+        }
+
+        function startTutorial() {
+            evaluatorName = document.getElementById('evaluatorName').value.trim();
+            if (!evaluatorName) {
+                alert('Please enter your name.');
+                return;
+            }
+
+            const tutorialPoemsDiv = document.getElementById('tutorialPoems');
+            tutorialPoemsDiv.innerHTML = '<p>Before we begin, here are some authentic Lord Byron poems:</p>';
+
+            tutorialPoems.forEach((poem, index) => {
+                const poemDiv = document.createElement('div');
+                poemDiv.className = 'poem';
+                poemDiv.innerHTML = `
+                    <p>${poem.lines[0]}</p>  <!-- Show only the first line, no titles -->
+                `;
+                tutorialPoemsDiv.appendChild(poemDiv);
+            });
+
+            showSection('tutorial');
+        }
+
+        function startEvaluation() {
+            showSection('evaluation');
+            showNextPoem();
+        }
+
+        function showNextPoem() {
+            if (currentPoemIndex < evaluationPoems.length) {
+                const poem = evaluationPoems[currentPoemIndex];
+                document.getElementById('currentPoem').textContent = poem.lines[0];  // Only show first line
+                document.getElementById('progress').textContent = 
+                    `Progress: ${currentPoemIndex + 1}/${evaluationPoems.length}`;
+            } else {
+                showSection('completion');
+            }
+        }
+
+        function evaluatePoem(choice) {
+            const poem = evaluationPoems[currentPoemIndex];
+            results.push({
+                evaluator: evaluatorName,
+                poemIndex: currentPoemIndex + 1,
+                actual: poem.isGenerated ? 'generated' : 'authentic',
+                guess: choice,
+                correct: (poem.isGenerated && choice === 'generated') || 
+                        (!poem.isGenerated && choice === 'authentic')
+            });
+
+            currentPoemIndex++;
+            showNextPoem();
+        }
+
+        function saveResults() {
+            const resultsJson = JSON.stringify(results, null, 2);
+            const blob = new Blob([resultsJson], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            // Save file as {evaluatorName}.json
+            a.href = url;
+            a.download = `${evaluatorName}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
