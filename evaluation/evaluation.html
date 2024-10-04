@@ -44,7 +44,7 @@
             background-color: #95a5a6;
             cursor: not-allowed;
         }
-        input[type="text"] {
+        input[type="text"], input[type="file"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -69,6 +69,9 @@
         .section.active {
             display: block;
         }
+        .file-input-group {
+            margin-bottom: 15px;
+        }
         .file-status {
             margin-left: 10px;
             font-style: italic;
@@ -80,8 +83,16 @@
         <!-- File Input Section -->
         <div id="fileInput" class="section active">
             <h1>Byron Poetry Evaluator</h1>
-            <span id="tutorialStatus" class="file-status">Not loaded</span>
-            <span id="evaluationStatus" class="file-status">Not loaded</span>
+            <div class="file-input-group">
+                <label for="tutorialFile">Tutorial Poems (Authentic Byron):</label>
+                <input type="file" id="tutorialFile" accept=".json">
+                <span id="tutorialStatus" class="file-status">Not loaded</span>
+            </div>
+            <div class="file-input-group">
+                <label for="evaluationFile">Evaluation Poems (Mixed):</label>
+                <input type="file" id="evaluationFile" accept=".json">
+                <span id="evaluationStatus" class="file-status">Not loaded</span>
+            </div>
             <button onclick="startNameInput()">Start</button>
         </div>
 
@@ -132,32 +143,46 @@
             document.getElementById(sectionId).classList.add('active');
         }
 
-        async function loadPoemsFromFile(filePath) {
-            const response = await fetch(filePath);
-            if (!response.ok) {
-                throw new Error(`Failed to load ${filePath}`);
-            }
-            return await response.json();
+        async function loadJSON(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        resolve(data);
+                    } catch (error) {
+                        reject(new Error('Invalid JSON file'));
+                    }
+                };
+                reader.onerror = error => reject(error);
+                reader.readAsText(file);
+            });
         }
 
-        window.addEventListener('DOMContentLoaded', async () => {
+        document.getElementById('tutorialFile').addEventListener('change', async (event) => {
             try {
-                // Automatically load the JSON files
-                tutorialPoems = await loadPoemsFromFile('tutorialPoems.json');  // Load from local file
-                evaluationPoems = await loadPoemsFromFile('evaluationPoems.json');  // Load from local file
-                evaluationPoems = _.shuffle(evaluationPoems);  // Shuffle evaluation poems
-
-                // Update file status
-                document.getElementById('tutorialStatus').textContent = `Loaded: ${tutorialPoems.length} tutorial poems`;
-                document.getElementById('evaluationStatus').textContent = `Loaded: ${evaluationPoems.length} evaluation poems`;
+                tutorialPoems = await loadJSON(event.target.files[0]);
+                document.getElementById('tutorialStatus').textContent = 
+                    `Loaded: ${tutorialPoems.length} poems`;
             } catch (error) {
-                alert('Error loading poems: ' + error.message);
+                alert('Error loading tutorial file: ' + error.message);
+            }
+        });
+
+        document.getElementById('evaluationFile').addEventListener('change', async (event) => {
+            try {
+                evaluationPoems = await loadJSON(event.target.files[0]);
+                evaluationPoems = _.shuffle(evaluationPoems);
+                document.getElementById('evaluationStatus').textContent = 
+                    `Loaded: ${evaluationPoems.length} poems`;
+            } catch (error) {
+                alert('Error loading evaluation file: ' + error.message);
             }
         });
 
         function startNameInput() {
             if (!tutorialPoems.length || !evaluationPoems.length) {
-                alert('Please wait until the poems are loaded.');
+                alert('Please load both tutorial and evaluation poems first.');
                 return;
             }
             showSection('nameInput');
@@ -172,12 +197,13 @@
 
             const tutorialPoemsDiv = document.getElementById('tutorialPoems');
             tutorialPoemsDiv.innerHTML = '<p>Before we begin, here are some authentic Lord Byron poems:</p>';
-
+            
             tutorialPoems.forEach((poem, index) => {
                 const poemDiv = document.createElement('div');
                 poemDiv.className = 'poem';
                 poemDiv.innerHTML = `
-                    <p>${poem.lines[0]}</p>  <!-- Show only the first line, no titles -->
+                    <h3>Example ${index + 1}: ${poem.title}</h3>
+                    ${poem.lines[0]}
                 `;
                 tutorialPoemsDiv.appendChild(poemDiv);
             });
@@ -193,7 +219,7 @@
         function showNextPoem() {
             if (currentPoemIndex < evaluationPoems.length) {
                 const poem = evaluationPoems[currentPoemIndex];
-                document.getElementById('currentPoem').textContent = poem.lines[0];  // Only show first line
+                document.getElementById('currentPoem').textContent = poem.lines[0];
                 document.getElementById('progress').textContent = 
                     `Progress: ${currentPoemIndex + 1}/${evaluationPoems.length}`;
             } else {
@@ -211,7 +237,7 @@
                 correct: (poem.isGenerated && choice === 'generated') || 
                         (!poem.isGenerated && choice === 'authentic')
             });
-
+            
             currentPoemIndex++;
             showNextPoem();
         }
@@ -221,10 +247,9 @@
             const blob = new Blob([resultsJson], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-
-            // Save file as {evaluatorName}.json
+            const sanitizedName = evaluatorName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             a.href = url;
-            a.download = `${evaluatorName}.json`;
+            a.download = `${sanitizedName}_evaluation_results.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

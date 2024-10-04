@@ -1,16 +1,23 @@
 [
-    {
-      "title": "Real Byron Poem",
-      "lines": [
-        "This is a real Byron poem\nThat will be mixed with generated ones\nShowing the proper format\nWith line breaks embedded"
-      ],
-      "isGenerated": false
-    },
-    {
-      "title": "Generated Poem",
-      "lines": [
-        "This is a generated poem\nTrying to mimic Byron's style\nWith the same formatting\nAs the authentic poems"
-      ],
-      "isGenerated": true
-    }
-  ]
+  {
+    "title": "",
+    "lines": [
+      "Absent or present, still to thee,\nMy friend, what magic spells belong!\nAs all can tell, who share, like me,\nIn turn thy converse, and thy song.\n\nBut when the dreaded hour shall come\nBy Friendship ever deemed too nigh,\nAnd \"Memory\" o'er her Druid's tomb\nShall weep that aught of thee can die,\n\nHow fondly will she then repay\nThy homage offered at her shrine,\nAnd blend, while ages roll away,\n_Her_ name immortally with _thine_!"
+    ],
+    "isGenerated": false
+  },
+  {
+    "title": "",
+    "lines": [
+      "Anne's Eye is liken'd to the _Sun_,\nFrom it such Beams of Beauty fall;\nAnd _this_ can be denied by none,\nFor like the _Sun_, it shines on _All_.\n\nThen do not admiration smother,\nOr say these glances don't become her;\nTo _you_, or _I_, or _any other_\nHer _Sun_, displays perpetual Summer."
+    ],
+    "isGenerated": false
+  },
+  {
+    "title": "",
+    "lines": [
+      "When Man, expell'd from Eden's bowers,\nA moment linger'd near the gate,\nEach scene recall'd the vanish'd hours,\nAnd bade him curse his future fate.\n\nBut, wandering on through distant climes,\nHe learnt to bear his load of grief;\nJust gave a sigh to other times,\nAnd found in busier scenes relief.\n\nThus, Lady! will it be with me,\nAnd I must view thy charms no more;\nFor, while I linger near to thee,\nI sigh for all I knew before.\n\nIn flight I shall be surely wise,\nEscaping from temptation's snare:\nI cannot view my Paradise\nWithout the wish of dwelling there."
+    ],
+    "isGenerated": false
+  }
+]
