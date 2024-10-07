@@ -1,0 +1,44 @@
+[
+  {
+    "evaluator": "kotsious",
+    "poemIndex": 1,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "kotsious",
+    "poemIndex": 2,
+    "actual": "generated",
+    "guess": "authentic",
+    "correct": false
+  },
+  {
+    "evaluator": "kotsious",
+    "poemIndex": 3,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "kotsious",
+    "poemIndex": 4,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "kotsious",
+    "poemIndex": 5,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "kotsious",
+    "poemIndex": 6,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  }
+]

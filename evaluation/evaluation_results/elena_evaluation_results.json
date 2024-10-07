@@ -1,0 +1,44 @@
+[
+  {
+    "evaluator": "elena",
+    "poemIndex": 1,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "elena",
+    "poemIndex": 2,
+    "actual": "generated",
+    "guess": "authentic",
+    "correct": false
+  },
+  {
+    "evaluator": "elena",
+    "poemIndex": 3,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "elena",
+    "poemIndex": 4,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "elena",
+    "poemIndex": 5,
+    "actual": "authentic",
+    "guess": "authentic",
+    "correct": true
+  },
+  {
+    "evaluator": "elena",
+    "poemIndex": 6,
+    "actual": "authentic",
+    "guess": "authentic",
+    "correct": true
+  }
+]

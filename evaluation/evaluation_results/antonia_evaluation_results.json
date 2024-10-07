@@ -1,0 +1,44 @@
+[
+  {
+    "evaluator": "antonia",
+    "poemIndex": 1,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "antonia",
+    "poemIndex": 2,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "antonia",
+    "poemIndex": 3,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "antonia",
+    "poemIndex": 4,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "antonia",
+    "poemIndex": 5,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "antonia",
+    "poemIndex": 6,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  }
+]

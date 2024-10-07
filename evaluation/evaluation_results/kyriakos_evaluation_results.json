@@ -1,0 +1,44 @@
+[
+  {
+    "evaluator": "kyriakos",
+    "poemIndex": 1,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "kyriakos",
+    "poemIndex": 2,
+    "actual": "generated",
+    "guess": "authentic",
+    "correct": false
+  },
+  {
+    "evaluator": "kyriakos",
+    "poemIndex": 3,
+    "actual": "authentic",
+    "guess": "authentic",
+    "correct": true
+  },
+  {
+    "evaluator": "kyriakos",
+    "poemIndex": 4,
+    "actual": "authentic",
+    "guess": "generated",
+    "correct": false
+  },
+  {
+    "evaluator": "kyriakos",
+    "poemIndex": 5,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  },
+  {
+    "evaluator": "kyriakos",
+    "poemIndex": 6,
+    "actual": "generated",
+    "guess": "generated",
+    "correct": true
+  }
+]
